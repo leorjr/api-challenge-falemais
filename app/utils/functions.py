@@ -1,5 +1,10 @@
 import json
-from app.exc.home_exceptions import HomeExceptions
+from app.utils import functions
+
+
+def home():
+    data = functions.load_db()
+    return data
 
 
 def load_db():

@@ -1,53 +1,49 @@
-from flask import Flask, jsonify, request
-from app.exc.home_exceptions import HomeExceptions
+from flask import jsonify, request
 from app.utils import functions
 
 
-def init_app(app: Flask):
+def get_all_informations():
+    data = functions.load_db()
 
-    @app.get("/")
-    def home():
-        data = functions.load_db()
+    return data
 
-        return data
 
-    @app.get("/planos")
-    def get_planos():
-        data = functions.load_db()
+def get_plans():
+    data = functions.load_db()
 
-        return jsonify(data["planos"])
+    return jsonify(data["planos"])
 
-    @app.get("/tarifacao")
-    def get_tarifacao():
-        data = functions.load_db()
 
-        return jsonify(data["tarifacao"])
+def get_pricing():
+    data = functions.load_db()
 
-    @app.post("/calcular")
-    def calculate():
+    return jsonify(data["tarifacao"])
 
-        dados_request = request.json
 
-        required_keys = ["origem", "destino", "tempo", "plano"]
+def calculate():
 
-        for key in dados_request.keys():
-            if key not in required_keys:
-                return {"err": f"Informar apenas origem, destino, tempo e plano escolhido - chave {key} desconhecida"}
+    dados_request = request.json
 
-        for key in required_keys:
-            if key not in dados_request.keys():
-                return {"err": f"favor informar {key}"}
+    required_keys = ["origem", "destino", "tempo", "plano"]
 
-        db = functions.load_db()
+    for key in dados_request.keys():
+        if key not in required_keys:
+            return {"err": f"Informar apenas origem, destino, tempo e plano escolhido - chave {key} desconhecida"}
 
-        tarifacao = functions.get_tarifacao(dados_request, db)
+    for key in required_keys:
+        if key not in dados_request.keys():
+            return {"err": f"favor informar {key}"}
 
-        plano_escolhido = functions.get_plano_escolhido(dados_request, db)
+    db = functions.load_db()
 
-        if plano_escolhido == None:
-            return {"error": f"Plano {dados_request['plano']} não localizado em nosso portfólio"}
+    tarifacao = functions.get_tarifacao(dados_request, db)
 
-        response = functions.calculate(
-            plano_escolhido, tarifacao, dados_request)
+    plano_escolhido = functions.get_plano_escolhido(dados_request, db)
 
-        return response
+    if plano_escolhido == None:
+        return {"error": f"Plano {dados_request['plano']} não localizado em nosso portfólio"}
+
+    response = functions.calculate(
+        plano_escolhido, tarifacao, dados_request)
+
+    return response
