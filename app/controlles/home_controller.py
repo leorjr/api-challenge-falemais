@@ -1,4 +1,5 @@
 from flask import Flask, jsonify, request
+from app.exc.home_exceptions import HomeExceptions
 from app.utils import functions
 
 
@@ -29,8 +30,6 @@ def init_app(app: Flask):
 
         required_keys = ["origem", "destino", "tempo", "plano"]
 
-        # TODO: refatorar aqui para que fique em uma função
-
         for key in dados_request.keys():
             if key not in required_keys:
                 return {"err": f"Informar apenas origem, destino, tempo e plano escolhido - chave {key} desconhecida"}
@@ -41,16 +40,12 @@ def init_app(app: Flask):
 
         db = functions.load_db()
 
-        tarifacao = {}
-        plano_escolhido = {}
+        tarifacao = functions.get_tarifacao(dados_request, db)
 
-        for item in db["tarifacao"]:
-            if (item["origem"] == dados_request["origem"]) and (item["destino"] == dados_request["destino"]):
-                tarifacao = item
+        plano_escolhido = functions.get_plano_escolhido(dados_request, db)
 
-        for item in db["planos"]:
-            if item["nome"] == dados_request["plano"]:
-                plano_escolhido = item
+        if plano_escolhido == None:
+            return {"error": f"Plano {dados_request['plano']} não localizado em nosso portfólio"}
 
         response = functions.calculate(
             plano_escolhido, tarifacao, dados_request)
