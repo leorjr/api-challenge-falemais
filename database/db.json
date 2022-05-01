@@ -1,0 +1,15 @@
+{
+  "custos": [
+    { "id": 1, "origem": "11", "destino": "16", "minuto": 1.9 },
+    { "id": 2, "origem": "16", "destino": "11", "minuto": 2.9 },
+    { "id": 3, "origem": "11", "destino": "17", "minuto": 1.7 },
+    { "id": 4, "origem": "17", "destino": "11", "minuto": 2.7 },
+    { "id": 5, "origem": "11", "destino": "18", "minuto": 0.9 },
+    { "id": 6, "origem": "18", "destino": "11", "minuto": 1.9 }
+  ],
+  "planos": [
+    { "id": 1, "nome": "FaleMais 30", "minutos": 30 },
+    { "id": 2, "nome": "FaleMais 60", "minutos": 60 },
+    { "id": 3, "nome": "FaleMais 120", "minutos": 120 }
+  ]
+}
