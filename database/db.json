@@ -1,5 +1,5 @@
 {
-  "custos": [
+  "tarifacao": [
     { "id": 1, "origem": "11", "destino": "16", "minuto": 1.9 },
     { "id": 2, "origem": "16", "destino": "11", "minuto": 2.9 },
     { "id": 3, "origem": "11", "destino": "17", "minuto": 1.7 },
